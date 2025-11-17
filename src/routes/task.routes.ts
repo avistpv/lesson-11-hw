@@ -42,7 +42,7 @@ function validateZodSchema(schema: z.ZodSchema, errorMessage?: string, useQuery 
             next()
         } catch (error) {
             if (error instanceof z.ZodError) {
-                const message = errorMessage || error.issues.map((e: z.ZodIssue) => e.message).join(', ')
+                const message = errorMessage || error.issues.map(e => e.message).join(', ')
                 return next(new AppError(message, 400))
             }
             next(error)
@@ -61,4 +61,3 @@ router.put('/:id', validateUpdateTask, updateTaskHandler)
 router.delete('/:id', deleteTaskHandler)
 
 export default router
-

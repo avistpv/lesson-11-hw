@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from 'express'
 import {getTasks, getTaskById, createTask, updateTask, deleteTask} from '../services/task.service.js'
 import AppError from '../errors.js'
-import {TaskStatus, TaskPriority} from '../types/task.types.js'
+import {TaskFilters} from '../types/task.types.js'
 
 function validateTaskId(id: string | undefined, next: NextFunction): id is string {
     if (!id) {
@@ -19,24 +19,13 @@ function handleTaskNotFound<T>(result: T | undefined | boolean, next: NextFuncti
     return true
 }
 
-export const getAllTasks = (req: Request, res: Response, next: NextFunction) => {
+export const getAllTasks = (
+    req: Request<{}, {}, {}, TaskFilters>,
+    res: Response,
+    next: NextFunction
+) => {
     try {
-        const filters: {
-            createdAt?: string
-            status?: TaskStatus
-            priority?: TaskPriority
-        } = {}
-
-        if (req.query.createdAt) {
-            filters.createdAt = req.query.createdAt as string
-        }
-        if (req.query.status) {
-            filters.status = req.query.status as TaskStatus
-        }
-        if (req.query.priority) {
-            filters.priority = req.query.priority as TaskPriority
-        }
-
+        const filters: TaskFilters = {...req.query}
         const tasks = getTasks(filters)
         res.json(tasks)
     } catch (error) {
@@ -121,4 +110,3 @@ export const deleteTaskHandler = (req: Request, res: Response, next: NextFunctio
         next(error)
     }
 }
-

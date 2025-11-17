@@ -1,4 +1,4 @@
-import {Task, CreateTaskInput, UpdateTaskInput, TaskStatus, TaskPriority} from '../types/task.types.js'
+import {Task, CreateTaskInput, UpdateTaskInput, TaskFilters} from '../types/task.types.js'
 import crypto from 'crypto'
 
 const tasks: Task[] = [
@@ -31,11 +31,7 @@ const tasks: Task[] = [
     }
 ]
 
-export const getTasks = (filters?: {
-    createdAt?: string
-    status?: TaskStatus
-    priority?: TaskPriority
-}): Task[] => {
+export const getTasks = (filters?: TaskFilters): Task[] => {
     if (!filters || Object.keys(filters).length === 0) {
         return tasks
     }

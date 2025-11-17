@@ -11,16 +11,19 @@ export type Task = {
     updatedAt: string
 }
 
-export type CreateTaskInput = {
+type TaskInputBase = {
     title: string
     description?: string
     status?: TaskStatus
     priority?: TaskPriority
 }
 
-export type UpdateTaskInput = {
-    title?: string
-    description?: string
+export type CreateTaskInput = TaskInputBase
+
+export type UpdateTaskInput = Partial<TaskInputBase>
+
+export type TaskFilters = {
+    createdAt?: string
     status?: TaskStatus
     priority?: TaskPriority
 }
