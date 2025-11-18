@@ -15,7 +15,7 @@ const taskStatusEnum = z.enum(['pending', 'in-progress', 'completed'])
 const taskPriorityEnum = z.enum(['low', 'medium', 'high'])
 
 const queryParamsSchema = z.object({
-    createdAt: z.string().optional(),
+    createdAt: z.string().datetime().optional(),
     status: taskStatusEnum.optional(),
     priority: taskPriorityEnum.optional()
 })

@@ -3,14 +3,6 @@ import {getTasks, getTaskById, createTask, updateTask, deleteTask} from '../serv
 import AppError from '../errors.js'
 import {TaskFilters} from '../types/task.types.js'
 
-function validateTaskId(id: string | undefined, next: NextFunction): id is string {
-    if (!id) {
-        next(new AppError('Task ID is required', 400))
-        return false
-    }
-    return true
-}
-
 function handleTaskNotFound<T>(result: T | undefined | boolean, next: NextFunction): result is T {
     if (!result) {
         next(new AppError('Task not found', 404))
@@ -36,10 +28,7 @@ export const getAllTasks = (
 export const getTask = (req: Request, res: Response, next: NextFunction) => {
     try {
         const {id} = req.params
-        if (!validateTaskId(id, next)) {
-            return
-        }
-        const task = getTaskById(id)
+        const task = getTaskById(id!)
 
         if (!handleTaskNotFound(task, next)) {
             return
@@ -71,12 +60,9 @@ export const createTaskHandler = (req: Request, res: Response, next: NextFunctio
 export const updateTaskHandler = (req: Request, res: Response, next: NextFunction) => {
     try {
         const {id} = req.params
-        if (!validateTaskId(id, next)) {
-            return
-        }
         const {title, description, status, priority} = req.body
 
-        const updatedTask = updateTask(id, {
+        const updatedTask = updateTask(id!, {
             title,
             description,
             status,
@@ -96,10 +82,7 @@ export const updateTaskHandler = (req: Request, res: Response, next: NextFunctio
 export const deleteTaskHandler = (req: Request, res: Response, next: NextFunction) => {
     try {
         const {id} = req.params
-        if (!validateTaskId(id, next)) {
-            return
-        }
-        const deleted = deleteTask(id)
+        const deleted = deleteTask(id!)
 
         if (!handleTaskNotFound(deleted, next)) {
             return

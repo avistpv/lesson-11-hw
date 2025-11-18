@@ -1,4 +1,4 @@
-import {Task, CreateTaskInput, UpdateTaskInput, TaskFilters} from '../types/task.types.js'
+import {Task, TaskInputBase, UpdateTaskInput, TaskFilters} from '../types/task.types.js'
 import crypto from 'crypto'
 
 const tasks: Task[] = [
@@ -70,7 +70,7 @@ const buildTaskDescription = (description: string | undefined, existingDescripti
     return {}
 }
 
-export const createTask = (input: CreateTaskInput): Task => {
+export const createTask = (input: TaskInputBase): Task => {
     const now = new Date().toISOString()
     const newTask: Task = {
         id: crypto.randomUUID(),
@@ -117,4 +117,3 @@ export const deleteTask = (id: string): boolean => {
     tasks.splice(taskIndex, 1)
     return true
 }
-
